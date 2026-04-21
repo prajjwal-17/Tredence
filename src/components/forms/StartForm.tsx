@@ -13,7 +13,7 @@ export const StartForm = memo<StartFormProps>(function StartForm({ nodeId }) {
     useNodeConfig<StartNodeData>(nodeId);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="space-y-6">
       <Input
         label="Title"
         value={draft.title}

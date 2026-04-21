@@ -1,4 +1,4 @@
-import { memo, type InputHTMLAttributes, useId } from 'react';
+import { memo, type InputHTMLAttributes } from 'react';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -9,36 +9,32 @@ export const Input = memo<InputProps>(function Input({
   label,
   error,
   className = '',
+  id,
   ...props
 }) {
-  const id = useId();
+  const inputId = id ?? label?.toLowerCase().replace(/\s+/g, '-');
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="space-y-2">
       {label && (
-        <label
-          htmlFor={id}
-          className="text-xs font-medium text-slate-400 uppercase tracking-wider"
-        >
+        <label htmlFor={inputId} className="text-sm font-semibold text-gray-700">
           {label}
-          {props.required && <span className="text-red-400 ml-0.5">*</span>}
         </label>
       )}
       <input
-        id={id}
+        id={inputId}
         className={`
-          w-full px-3 py-2 text-sm
-          bg-slate-800/80 border border-slate-600/50 rounded-lg
-          text-slate-200 placeholder-slate-500
-          focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500
-          transition-all duration-200
-          disabled:opacity-50 disabled:cursor-not-allowed
-          ${error ? 'border-red-500/50 focus:ring-red-500/50' : ''}
+          h-11 w-full rounded-lg px-3.5 text-sm text-gray-900
+          border border-gray-200 bg-white
+          placeholder:text-gray-400
+          focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300
+          transition-all duration-150
+          ${error ? 'border-red-300 focus:ring-red-100' : ''}
           ${className}
         `}
         {...props}
       />
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {error && <span className="text-xs text-red-500">{error}</span>}
     </div>
   );
 });

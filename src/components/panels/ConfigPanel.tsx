@@ -10,7 +10,6 @@ export const ConfigPanel = memo(function ConfigPanel() {
   const removeNode = useWorkflowStore((s) => s.removeNode);
   const selectNode = useWorkflowStore((s) => s.selectNode);
 
-  // Derive config and errors outside selectors to avoid unstable references
   const nodeConfig = selectedNodeId ? nodeConfigs[selectedNodeId] : undefined;
   const nodeErrors = useMemo(
     () => validationErrors.filter((e) => e.nodeId === selectedNodeId),
@@ -19,73 +18,86 @@ export const ConfigPanel = memo(function ConfigPanel() {
 
   if (!selectedNodeId || !nodeConfig) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center p-6">
-        <div className="w-16 h-16 rounded-2xl bg-slate-800/50 flex items-center justify-center mb-4">
-          <span className="text-3xl opacity-40">🖱️</span>
+      <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-black/5">
+        <div className="flex h-[calc(100vh-230px)] min-h-[360px] flex-col items-center justify-center text-center">
+          <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
+            <svg className="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M15 15l-2 5L9 9l11 4-5 2zm0 0 5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656-2.12 2.122" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold text-gray-950">No node selected</h3>
+          <p className="mt-2 max-w-[220px] text-sm leading-6 text-gray-500">
+            Select a workflow block to edit its settings and metadata.
+          </p>
         </div>
-        <h3 className="text-sm font-medium text-slate-400 mb-1">No Node Selected</h3>
-        <p className="text-xs text-slate-500">
-          Click a node on the canvas to configure it
-        </p>
       </div>
     );
   }
 
-  // Get the form component from registry
   const entry = getRegistryEntryForType(nodeConfig.type);
   const FormComponent = entry?.formComponent;
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700/50">
-        <div className="flex items-center gap-2">
-          <span className="text-lg">{entry?.icon ?? '📦'}</span>
-          <div>
-            <h3 className="text-sm font-semibold text-slate-200">
-              {nodeConfig.data.title || 'Untitled'}
-            </h3>
-            <span
-              className="text-[10px] font-semibold uppercase tracking-wider"
-              style={{ color: entry?.color ?? '#94a3b8' }}
+    <div className="flex h-full flex-col space-y-4">
+      <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-black/5">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-3">
+            <div
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-semibold"
+              style={{ backgroundColor: `${entry?.color ?? '#9ca3af'}14`, color: entry?.color ?? '#9ca3af' }}
             >
-              {nodeConfig.type} node
-            </span>
+              {entry?.icon ?? 'N'}
+            </div>
+            <div className="min-w-0">
+              <h3 className="truncate text-lg font-semibold tracking-tight text-gray-950">
+                {nodeConfig.data.title || 'Untitled'}
+              </h3>
+              <p className="text-sm capitalize text-gray-500">{nodeConfig.type}</p>
+            </div>
           </div>
+          <button
+            onClick={() => {
+              removeNode(selectedNodeId);
+              selectNode(null);
+            }}
+            className="rounded-lg p-2 text-gray-400 transition-colors duration-150 hover:bg-red-50 hover:text-red-600"
+            title="Delete node"
+            aria-label="Delete node"
+          >
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="m19 7-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16" />
+            </svg>
+          </button>
         </div>
-        <button
-          onClick={() => {
-            removeNode(selectedNodeId);
-            selectNode(null);
-          }}
-          className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
-          title="Delete node"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
-        </button>
       </div>
 
-      {/* Validation errors */}
-      {nodeErrors.length > 0 && (
-        <div className="mx-4 mt-3 p-2.5 bg-red-500/10 border border-red-500/20 rounded-lg">
-          {nodeErrors.map((err, i) => (
-            <p key={i} className="text-xs text-red-400 flex items-start gap-1.5">
-              <span className="shrink-0 mt-0.5">{err.severity === 'error' ? '🔴' : '🟡'}</span>
-              {err.message}
-            </p>
-          ))}
-        </div>
-      )}
-
-      {/* Form */}
-      <div className="flex-1 overflow-y-auto p-4">
-        {FormComponent ? (
-          <FormComponent nodeId={selectedNodeId} />
-        ) : (
-          <p className="text-sm text-slate-500">No configuration available</p>
+      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto">
+        {nodeErrors.length > 0 && (
+          <section className="rounded-2xl bg-red-50 p-4 ring-1 ring-red-100">
+            <h4 className="mb-3 text-sm font-semibold text-red-700">
+              Validation
+            </h4>
+            <div className="space-y-2">
+              {nodeErrors.map((err, i) => (
+                <p key={i} className="flex items-start gap-2 text-sm leading-5 text-red-600">
+                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-red-500" />
+                  {err.message}
+                </p>
+              ))}
+            </div>
+          </section>
         )}
+
+        <section className="rounded-2xl bg-slate-50 p-4 ring-1 ring-black/5">
+          <h4 className="mb-4 text-sm font-semibold text-gray-950">
+            Node settings
+          </h4>
+          {FormComponent ? (
+            <FormComponent nodeId={selectedNodeId} />
+          ) : (
+            <p className="text-sm text-gray-500">No configuration available.</p>
+          )}
+        </section>
       </div>
     </div>
   );

@@ -28,7 +28,7 @@ export function initializeNodeRegistry() {
   registerNodeType({
     type: NodeType.START,
     label: 'Start',
-    icon: '▶',
+    icon: 'S',
     color: '#10b981',
     bgColor: '#0f1a18',
     borderColor: '#065f4622',
@@ -41,7 +41,7 @@ export function initializeNodeRegistry() {
   registerNodeType({
     type: NodeType.TASK,
     label: 'Task',
-    icon: '📋',
+    icon: 'T',
     color: '#6366f1',
     bgColor: '#131327',
     borderColor: '#4f46e522',
@@ -54,7 +54,7 @@ export function initializeNodeRegistry() {
   registerNodeType({
     type: NodeType.APPROVAL,
     label: 'Approval',
-    icon: '✅',
+    icon: 'A',
     color: '#f59e0b',
     bgColor: '#1a1608',
     borderColor: '#d9770622',
@@ -67,7 +67,7 @@ export function initializeNodeRegistry() {
   registerNodeType({
     type: NodeType.AUTOMATED,
     label: 'Automated',
-    icon: '⚡',
+    icon: 'Z',
     color: '#8b5cf6',
     bgColor: '#170f27',
     borderColor: '#7c3aed22',
@@ -80,7 +80,7 @@ export function initializeNodeRegistry() {
   registerNodeType({
     type: NodeType.END,
     label: 'End',
-    icon: '⏹',
+    icon: 'E',
     color: '#ef4444',
     bgColor: '#1a0c0c',
     borderColor: '#dc262622',

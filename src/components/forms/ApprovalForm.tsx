@@ -14,7 +14,7 @@ export const ApprovalForm = memo<ApprovalFormProps>(function ApprovalForm({
     useNodeConfig<ApprovalNodeData>(nodeId);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="space-y-6">
       <Input
         label="Title"
         value={draft.title}
@@ -29,7 +29,7 @@ export const ApprovalForm = memo<ApprovalFormProps>(function ApprovalForm({
         onBlur={commitToStore}
         placeholder="e.g., Manager, HR Director"
       />
-      <div className="flex flex-col gap-1.5">
+      <div className="space-y-2">
         <Input
           label="Auto-Approve Threshold (%)"
           type="number"
@@ -43,7 +43,7 @@ export const ApprovalForm = memo<ApprovalFormProps>(function ApprovalForm({
             )
           }
         />
-        <p className="text-[11px] text-slate-500">
+        <p className="rounded-lg bg-gray-50 px-3 py-2 text-sm leading-5 text-gray-500">
           If set above 0, approvals may be auto-approved based on this threshold.
           Set to 0 to always require manual approval.
         </p>

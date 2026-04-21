@@ -13,7 +13,7 @@ export const EndForm = memo<EndFormProps>(function EndForm({ nodeId }) {
     useNodeConfig<EndNodeData>(nodeId);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="space-y-6">
       <Input
         label="Title"
         value={draft.title}
@@ -30,7 +30,7 @@ export const EndForm = memo<EndFormProps>(function EndForm({ nodeId }) {
       <Toggle
         label="Include Summary"
         checked={draft.summaryFlag}
-        onChange={(checked) => commitField('summaryFlag', checked)}
+        onChange={(e) => commitField('summaryFlag', e.currentTarget.checked)}
       />
     </div>
   );

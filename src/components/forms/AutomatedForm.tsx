@@ -40,7 +40,7 @@ export const AutomatedForm = memo<AutomatedFormProps>(function AutomatedForm({
   const selectedAction = automations.find((a) => a.id === draft.actionId);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="space-y-6">
       <Input
         label="Title"
         value={draft.title}
@@ -66,8 +66,8 @@ export const AutomatedForm = memo<AutomatedFormProps>(function AutomatedForm({
 
       {/* Dynamic params based on selected action */}
       {selectedAction && selectedAction.params.length > 0 && (
-        <div className="flex flex-col gap-3 p-3 bg-slate-800/40 rounded-lg border border-slate-700/30">
-          <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">
+        <div className="space-y-4 rounded-xl border border-gray-200 bg-gray-50 p-4">
+          <span className="text-sm font-semibold text-gray-900">
             Action Parameters
           </span>
           {selectedAction.params.map((param) => (

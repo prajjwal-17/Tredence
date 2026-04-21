@@ -6,8 +6,6 @@ import { Badge } from '../ui/Badge';
 interface BaseNodeProps extends NodeProps {
   icon: string;
   color: string;
-  borderColor: string;
-  bgColor: string;
   showSourceHandle?: boolean;
   showTargetHandle?: boolean;
   children?: ReactNode;
@@ -19,8 +17,6 @@ export const BaseNode = memo<BaseNodeProps>(function BaseNode({
   selected,
   icon,
   color,
-  borderColor,
-  bgColor,
   showSourceHandle = true,
   showTargetHandle = true,
 }) {
@@ -37,19 +33,13 @@ export const BaseNode = memo<BaseNodeProps>(function BaseNode({
   return (
     <div
       className={`
-        relative min-w-[160px] rounded-xl shadow-2xl
-        transition-all duration-200 ease-out
-        ${selected ? 'ring-2 ring-offset-2 ring-offset-slate-950 scale-105' : 'hover:scale-[1.02]'}
+        relative min-w-[172px] rounded-xl bg-white
+        border transition-all duration-150 ease-out
+        ${selected
+          ? 'border-blue-500 shadow-lg ring-2 ring-blue-500/20'
+          : 'border-gray-200 shadow-sm hover:border-gray-300 hover:shadow-md'
+        }
       `}
-      style={{
-        borderColor: selected ? color : borderColor,
-        borderWidth: '2px',
-        borderStyle: 'solid',
-        background: bgColor,
-        boxShadow: selected
-          ? `0 0 20px ${color}33, 0 8px 32px rgba(0,0,0,0.4)`
-          : '0 8px 32px rgba(0,0,0,0.3)',
-      }}
     >
       {/* Error badge */}
       {(errorCount > 0 || warningCount > 0) && (
@@ -64,18 +54,18 @@ export const BaseNode = memo<BaseNodeProps>(function BaseNode({
       )}
 
       {/* Content */}
-      <div className="flex items-center gap-3 px-4 py-3">
+      <div className="flex items-center gap-3 px-3.5 py-3">
         <div
-          className="flex items-center justify-center w-8 h-8 rounded-lg text-lg"
-          style={{ backgroundColor: `${color}22` }}
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-sm font-semibold"
+          style={{ backgroundColor: `${color}14`, color }}
         >
           {icon}
         </div>
-        <div className="flex flex-col">
-          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color }}>
+        <div className="flex flex-col min-w-0">
+          <span className="text-xs font-semibold uppercase" style={{ color }}>
             {(data as Record<string, unknown>).nodeType as string ?? 'Node'}
           </span>
-          <span className="text-sm font-medium text-slate-200 truncate max-w-[120px]">
+          <span className="max-w-[132px] truncate text-sm font-medium text-gray-900">
             {(data as Record<string, unknown>).label as string ?? 'Untitled'}
           </span>
         </div>
@@ -86,22 +76,16 @@ export const BaseNode = memo<BaseNodeProps>(function BaseNode({
         <Handle
           type="target"
           position={Position.Top}
-          className="!w-3 !h-3 !rounded-full !border-2 !-top-1.5"
-          style={{
-            backgroundColor: bgColor,
-            borderColor: color,
-          }}
+          className="!h-3 !w-3 !rounded-full !border-2 !bg-white !transition-all !duration-150 !-top-1.5"
+          style={{ borderColor: color }}
         />
       )}
       {showSourceHandle && (
         <Handle
           type="source"
           position={Position.Bottom}
-          className="!w-3 !h-3 !rounded-full !border-2 !-bottom-1.5"
-          style={{
-            backgroundColor: bgColor,
-            borderColor: color,
-          }}
+          className="!h-3 !w-3 !rounded-full !border-2 !bg-white !transition-all !duration-150 !-bottom-1.5"
+          style={{ borderColor: color }}
         />
       )}
     </div>

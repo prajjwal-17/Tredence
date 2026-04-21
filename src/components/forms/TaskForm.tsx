@@ -13,7 +13,7 @@ export const TaskForm = memo<TaskFormProps>(function TaskForm({ nodeId }) {
     useNodeConfig<TaskNodeData>(nodeId);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="space-y-6">
       <Input
         label="Title"
         value={draft.title}

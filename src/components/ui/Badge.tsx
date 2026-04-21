@@ -1,31 +1,25 @@
-import { memo } from 'react';
+import { memo, type ReactNode } from 'react';
 
 interface BadgeProps {
-  children: React.ReactNode;
-  variant?: 'info' | 'success' | 'warning' | 'error';
-  size?: 'sm' | 'md';
+  variant: 'error' | 'warning' | 'info';
+  children: ReactNode;
 }
 
-export const Badge = memo<BadgeProps>(function Badge({
-  children,
-  variant = 'info',
-  size = 'sm',
-}) {
-  const variantClasses = {
-    info: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-    success: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-    warning: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-    error: 'bg-red-500/20 text-red-300 border-red-500/30',
-  };
-
-  const sizeClasses = {
-    sm: 'text-[10px] px-1.5 py-0.5',
-    md: 'text-xs px-2 py-1',
+export const Badge = memo<BadgeProps>(function Badge({ variant, children }) {
+  const variants = {
+    error: 'bg-red-500 text-white',
+    warning: 'bg-amber-400 text-white',
+    info: 'bg-gray-500 text-white',
   };
 
   return (
     <span
-      className={`inline-flex items-center font-semibold rounded-full border ${variantClasses[variant]} ${sizeClasses[size]}`}
+      className={`
+        inline-flex items-center justify-center
+        min-w-[18px] h-[18px] px-1 rounded-full
+        text-[10px] font-bold leading-none
+        ${variants[variant]}
+      `}
     >
       {children}
     </span>
